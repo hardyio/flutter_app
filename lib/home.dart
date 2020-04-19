@@ -5,7 +5,7 @@ import 'app.dart';
 
 void main() => runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primaryColor: Colors.blue),
+        theme: ThemeData(primaryColor: Color(0xfffe8437)),
         home: LoadingPage(),
         routes: <String, WidgetBuilder>{
           "app": (BuildContext context) => AppWidget(),
