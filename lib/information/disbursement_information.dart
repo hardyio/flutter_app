@@ -9,16 +9,13 @@ class DisbursementInformation extends StatefulWidget {
 }
 
 class _DisbursementInformationState extends State<DisbursementInformation> {
-  var _paymentAlignment = Alignment.bottomLeft;
-  var _bankAlignment = Alignment.bottomLeft;
-
   final String LABEL1 = "Payment Method";
   final String LABEL2 = "Bank Name";
-  final String ACCOUNT = "Account";
+  final String LABEL3 = "Account";
 
   var paymentMethod = "";
   var bankName = "";
-  var list = ["Bank Transfer", "GCash", "Cash Pickup"];
+  var itemList = ["Bank Transfer", "GCash", "Cash Pickup"];
 
   @override
   Widget build(BuildContext context) {
@@ -60,35 +57,62 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
               padding: EdgeInsets.all(15),
               child: Column(
                 children: <Widget>[
-                  buildItemSelectView(context, LABEL1, _paymentAlignment,
-                      paymentMethod, _onTap),
-                  buildItemSelectView(context, LABEL2, _bankAlignment, bankName,
-                      () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => ThirdPage()));
-                  }),
-                  TextField(
-                    autofocus: false,
-                    decoration: InputDecoration(
-//                        hintText: ACCOUNT,
-//                        hintStyle: TextStyle(color: Color(0x80616161)),
-                        alignLabelWithHint: true,
-                        labelText: ACCOUNT,
-                        labelStyle:
-                            TextStyle(color: Color(0x80616161), fontSize: 12)),
-                    onChanged: (str) {
-                      if (str.length == 11) {}
-                    },
+                  Stack(
+                    children: <Widget>[
+                      TextField(
+                          controller:
+                              TextEditingController(text: paymentMethod),
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xff616161)),
+                          autofocus: false,
+                          enabled: false,
+                          decoration: InputDecoration(
+                              alignLabelWithHint: true,
+                              labelText: LABEL1,
+                              labelStyle: TextStyle(
+                                  color: Color(0x80616161), fontSize: 12))),
+                      GestureDetector(
+                        onTap: _onTap,
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          height: 55,
+                        ),
+                      )
+                    ],
+                  ),
+                  Stack(
+                    children: <Widget>[
+                      TextField(
+                        controller: TextEditingController(text: bankName),
+                        autofocus: false,
+                        enabled: false,
+                        decoration: InputDecoration(
+                            alignLabelWithHint: true,
+                            labelText: LABEL2,
+                            labelStyle: TextStyle(
+                                color: Color(0x80616161), fontSize: 12)),
+                        onChanged: (str) {
+                          if (str.length == 11) {}
+                        },
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          height: 55,
+                        ),
+                      )
+                    ],
                   ),
                   TextField(
                     autofocus: false,
                     decoration: InputDecoration(
-//                        hintText: ACCOUNT,
-//                        hintStyle: TextStyle(color: Color(0x80616161)),
+                        //                        hintText: ACCOUNT,
+                        //                        hintStyle: TextStyle(color: Color(0x80616161)),
                         alignLabelWithHint: true,
-                        labelText: ACCOUNT,
+                        labelText: LABEL3,
                         labelStyle:
                             TextStyle(color: Color(0x80616161), fontSize: 12)),
                   ),
@@ -150,15 +174,16 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
                     onTap: () {
                       setState(() {
                         Navigator.pop(context);
-                        _paymentAlignment = Alignment.topLeft;
-                        paymentMethod = list[index];
+                        paymentMethod = itemList[index];
                       });
                     },
                     child: Container(
+                      width: double.infinity,
                       height: 42,
-                      child: Center(child: Text(list[index])),
+                      color: Colors.transparent,
+                      child: Center(child: Text(itemList[index])),
                     )),
-                itemCount: list.length),
+                itemCount: itemList.length),
           )
         ],
       ),
@@ -195,7 +220,8 @@ buildItemSelectView(context, label, _alignment, itemText, _onTap) {
                           child: Padding(
                             padding: EdgeInsets.only(top: 6),
                             child: Text(itemText,
-                                style: TextStyle(fontSize: 14, color: Color(0xff4d4d4d))),
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0xff4d4d4d))),
                           ),
                         ),
                         Icon(Icons.arrow_forward_ios, size: 10)

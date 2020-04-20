@@ -14,25 +14,30 @@ class BasicInformation extends StatefulWidget {
 }
 
 class _BasicInformationState extends State<BasicInformation> {
-  final LABEL1 = "Date of Birth";
-  final LABEL2 = "Educational Attainment";
-  final LABEL3 = "Martial Status";
-  final LABEL4 = "Permanent Address";
-  final LABEL5 = "Detailed Address";
-  final LABEL6 = "Email";
-  final LABEL7 = "Alternative Phone Number";
+  final Date_of_Birth = "Date of Birth";
+  final Educational_Attainment = "Educational Attainment";
+  final Martial_Status = "Martial Status";
+  final Permanent_Address = "Permanent Address";
+  final Detailed_Address = "Detailed Address";
+  final Email = "Email";
+  final Alternative_Phone_Number = "Alternative Phone Number";
 
-  String itemText1 = "";
   var _birthAlignment = Alignment.bottomLeft;
 
   Dio dio;
-  BorrowerInformation information = BorrowerInformation();
+  BorrowerInformation information = BorrowerInformation(
+      birthday: "",
+      educationLevel: "",
+      maritalStatus: "",
+      provinceDesc: "",
+      cityDesc: "",
+      barangayDesc: "",
+      address: "",
+      email: "");
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    LogUtil.init(isDebug: true);
     dio = Dio();
     _getBasicInformation();
   }
@@ -138,14 +143,15 @@ class _BasicInformationState extends State<BasicInformation> {
                   ),
                   Divider(height: 1, thickness: 1),
                   SizedBox(height: 6),
+                  buildItemSelectView(context, Date_of_Birth, _birthAlignment,
+                      information.birthday, () {}),
                   buildItemSelectView(
-                      context, LABEL1, _birthAlignment, information.birthday, () {}),
+                      context, Educational_Attainment, _birthAlignment, information.educationLevel, () {}),
                   buildItemSelectView(
-                      context, LABEL1, _birthAlignment, itemText1, () {}),
+                      context, Martial_Status, _birthAlignment, information.maritalStatus, () {}),
                   buildItemSelectView(
-                      context, LABEL1, _birthAlignment, itemText1, () {}),
-                  buildItemSelectView(
-                      context, LABEL1, _birthAlignment, itemText1, () {}),
+                      context, Permanent_Address, _birthAlignment, "${information.provinceDesc},${information.cityDesc},${information.barangayDesc}", () {}),
+                  buildItemSelectView(context,Detailed_Address, _birthAlignment, information.address, () {}),
                   Container(
                     width: double.infinity,
                     height: 48,
