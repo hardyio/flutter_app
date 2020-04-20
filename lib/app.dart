@@ -48,7 +48,6 @@ FourthPage fourthPage;
 
 class _AppState extends State<AppWidget> {
 
-
   int _currentIndex = 0;
 
   @override
@@ -80,7 +79,7 @@ class _AppState extends State<AppWidget> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('first')),
-          BottomNavigationBarItem(icon: Icon(Icons.add_photo_alternate), title: Text('second')),
+          BottomNavigationBarItem(icon: Icon(Icons.local_cafe), title: Text('饿了么')),
           BottomNavigationBarItem(icon: Icon(Icons.ac_unit), title: Text('third')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('fourth')),
         ],

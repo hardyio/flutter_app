@@ -22,6 +22,9 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
 
   @override
   Widget build(BuildContext context) {
+    var _onTap = () {
+      showBottomDialog(context);
+    };
     return MaterialApp(
       theme: ThemeData(
           primaryColor: Color(0xfffe8437), primaryColorDark: Color(0xfffe8437)),
@@ -57,57 +60,8 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
               padding: EdgeInsets.all(15),
               child: Column(
                 children: <Widget>[
-                  buildItemSelectView(
-                      context, LABEL1, _paymentAlignment, paymentMethod, () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context) => Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 4,
-                                  child: Container(color: Color(0xfffe8437)),
-                                ),
-                                Stack(
-                                  alignment: Alignment.centerRight,
-                                  children: <Widget>[
-                                    Container(
-                                        width: double.infinity,
-                                        height: 40,
-                                        child: Center(child: Text(LABEL1))),
-                                    IconButton(
-                                      icon: Icon(Icons.close),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    )
-                                  ],
-                                ),
-                                Container(
-                                  height: 3 * 42.0,
-                                  child: ListView.separated(
-                                      separatorBuilder: (context, index) =>
-                                          Divider(height: 1, thickness: 1),
-                                      itemBuilder: (context, index) =>
-                                          GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  Navigator.pop(context);
-                                                  _paymentAlignment =
-                                                      Alignment.topLeft;
-                                                  paymentMethod = list[index];
-                                                });
-                                              },
-                                              child: Container(
-                                                height: 42,
-                                                child: Center(
-                                                    child: Text(list[index])),
-                                              )),
-                                      itemCount: list.length),
-                                )
-                              ],
-                            ));
-                  }),
+                  buildItemSelectView(context, LABEL1, _paymentAlignment,
+                      paymentMethod, _onTap),
                   buildItemSelectView(context, LABEL2, _bankAlignment, bankName,
                       () {
                     Navigator.push(
@@ -158,6 +112,58 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
       ),
     );
   }
+
+  void showBottomDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Column(
+        children: <Widget>[
+          Divider(
+            height: 4,
+            thickness: 4,
+            color: Color(0xfffe8437),
+          ),
+          Stack(
+            alignment: Alignment.centerRight,
+            children: <Widget>[
+              Container(
+                  height: 40,
+                  child: Center(
+                      child: Text(LABEL1,
+                          style: TextStyle(
+                              fontSize: 14, color: Color(0x80616161))))),
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+          Divider(height: 1, thickness: 1),
+          Container(
+            height: 3 * 42.0,
+            child: ListView.separated(
+                separatorBuilder: (context, index) =>
+                    Divider(height: 1, thickness: 1),
+                itemBuilder: (context, index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        Navigator.pop(context);
+                        _paymentAlignment = Alignment.topLeft;
+                        paymentMethod = list[index];
+                      });
+                    },
+                    child: Container(
+                      height: 42,
+                      child: Center(child: Text(list[index])),
+                    )),
+                itemCount: list.length),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 buildItemSelectView(context, label, _alignment, itemText, _onTap) {
@@ -189,8 +195,7 @@ buildItemSelectView(context, label, _alignment, itemText, _onTap) {
                           child: Padding(
                             padding: EdgeInsets.only(top: 6),
                             child: Text(itemText,
-                                style: TextStyle(
-                                    fontSize: 14, color: Color(0xff4d4d4d))),
+                                style: TextStyle(fontSize: 14, color: Color(0xff4d4d4d))),
                           ),
                         ),
                         Icon(Icons.arrow_forward_ios, size: 10)
