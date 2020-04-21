@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterapp/home_page/third_page.dart';
+
+import 'bank_name_list.dart';
 
 class DisbursementInformation extends StatefulWidget {
   @override
@@ -11,10 +12,16 @@ class DisbursementInformation extends StatefulWidget {
 class _DisbursementInformationState extends State<DisbursementInformation> {
   final String LABEL1 = "Payment Method";
   final String LABEL2 = "Bank Name";
-  final String LABEL3 = "Account";
+  final String BANK_LABEL = "Account No.";
+  final String GCASH_LABEL = "Account";
+  final String GCASH_LABEL2 = "Re-enter account number";
 
   var paymentMethod = "";
   var bankName = "";
+  bool bankOffstage = true;
+  bool gcashAccountOffstage = true;
+  bool gcashAccountOffstage2 = true;
+  bool tipOffstage = true;
   var itemList = ["Bank Transfer", "GCash", "Cash Pickup"];
 
   @override
@@ -58,6 +65,7 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
               child: Column(
                 children: <Widget>[
                   Stack(
+                    alignment: Alignment.bottomRight,
                     children: <Widget>[
                       TextField(
                           controller:
@@ -78,50 +86,113 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
                           width: double.infinity,
                           height: 55,
                         ),
-                      )
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Icon(
+                            Icons.keyboard_arrow_right,
+                            size: 18,
+                          ))
                     ],
                   ),
-                  Stack(
-                    children: <Widget>[
-                      TextField(
-                        controller: TextEditingController(text: bankName),
+                  Offstage(
+                    offstage: bankOffstage,
+                    child: Column(
+                      children: <Widget>[
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: <Widget>[
+                            TextField(
+                              controller: TextEditingController(text: bankName),
+                              autofocus: false,
+                              enabled: false,
+                              decoration: InputDecoration(
+                                  alignLabelWithHint: true,
+                                  labelText: LABEL2,
+                                  labelStyle: TextStyle(
+                                      color: Color(0x80616161), fontSize: 12)),
+                              onChanged: (str) {
+                                if (str.length == 11) {}
+                              },
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                var bankBean = await Navigator.push(context, new MaterialPageRoute(builder: (context)=>BankNameListPage()));
+                                setState(() {
+                                  bankName = bankBean["accountDesc"];
+                                });
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                width: double.infinity,
+                                height: 55,
+                              ),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(bottom: 10),
+                                child: Icon(
+                                  Icons.keyboard_arrow_right,
+                                  size: 18,
+                                ))
+                          ],
+                        ),
+                        TextField(
+                          autofocus: false,
+                          decoration: InputDecoration(
+                              alignLabelWithHint: true,
+                              labelText: BANK_LABEL,
+                              labelStyle: TextStyle(
+                                  color: Color(0x80616161), fontSize: 12)),
+                        )
+                      ],
+                    ),
+                  ),
+                  Offstage(
+                      offstage: gcashAccountOffstage,
+                      child: TextField(
                         autofocus: false,
-                        enabled: false,
+                        onChanged: (char) {
+                          if (char.length == 11) {}
+                        },
                         decoration: InputDecoration(
                             alignLabelWithHint: true,
-                            labelText: LABEL2,
+                            labelText: GCASH_LABEL,
                             labelStyle: TextStyle(
                                 color: Color(0x80616161), fontSize: 12)),
-                        onChanged: (str) {
-                          if (str.length == 11) {}
-                        },
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          color: Colors.transparent,
-                          width: double.infinity,
-                          height: 55,
-                        ),
-                      )
-                    ],
-                  ),
-                  TextField(
-                    autofocus: false,
-                    decoration: InputDecoration(
-                        //                        hintText: ACCOUNT,
-                        //                        hintStyle: TextStyle(color: Color(0x80616161)),
-                        alignLabelWithHint: true,
-                        labelText: LABEL3,
-                        labelStyle:
-                            TextStyle(color: Color(0x80616161), fontSize: 12)),
+                      )),
+                  Offstage(
+                      offstage: gcashAccountOffstage2,
+                      child: TextField(
+                        autofocus: false,
+                        decoration: InputDecoration(
+                            alignLabelWithHint: true,
+                            labelText: GCASH_LABEL2,
+                            labelStyle: TextStyle(
+                                color: Color(0x80616161), fontSize: 12)),
+                      )),
+                  Offstage(
+                    offstage: tipOffstage,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 14),
+                      child: Text.rich(TextSpan(children: [
+                        TextSpan(
+                            text:
+                                "Please ensure all your information is correct to avoid failure of transaction. ",
+                            style: TextStyle(fontSize: 12)),
+                        TextSpan(
+                            text:
+                                "(Note : If your money is disbursed to others because of your mistake, you still have to full repay)",
+                            style: TextStyle(
+                                fontSize: 12, color: Color(0xffff6956)))
+                      ])),
+                    ),
                   ),
                   SizedBox(height: 26),
                   Container(
                       width: double.infinity,
                       height: 48,
                       child: CupertinoButton(
-                        child: Text("Sumbit",
+                        child: Text("Submit",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 14)),
                         onPressed: () {},
@@ -175,6 +246,21 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
                       setState(() {
                         Navigator.pop(context);
                         paymentMethod = itemList[index];
+                        if (index == 0) {
+                          //Bank
+                          bankOffstage = false;
+                          gcashAccountOffstage = true;
+                          tipOffstage = false;
+                        } else if (index == 1) {
+                          //GCash
+                          bankOffstage = true;
+                          gcashAccountOffstage = false;
+                          tipOffstage = false;
+                        } else {
+                          bankOffstage = true;
+                          gcashAccountOffstage = true;
+                          tipOffstage = true;
+                        }
                       });
                     },
                     child: Container(
