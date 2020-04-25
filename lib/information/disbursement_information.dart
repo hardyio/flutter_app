@@ -64,37 +64,7 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
               padding: EdgeInsets.all(15),
               child: Column(
                 children: <Widget>[
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: <Widget>[
-                      TextField(
-                          controller:
-                              TextEditingController(text: paymentMethod),
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xff616161)),
-                          autofocus: false,
-                          enabled: false,
-                          decoration: InputDecoration(
-                              alignLabelWithHint: true,
-                              labelText: LABEL1,
-                              labelStyle: TextStyle(
-                                  color: Color(0x80616161), fontSize: 12))),
-                      GestureDetector(
-                        onTap: _onTap,
-                        child: Container(
-                          color: Colors.transparent,
-                          width: double.infinity,
-                          height: 55,
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Icon(
-                            Icons.keyboard_arrow_right,
-                            size: 18,
-                          ))
-                    ],
-                  ),
+                  buildMethodItemSelector(_onTap),
                   Offstage(
                     offstage: bankOffstage,
                     child: Column(
@@ -208,6 +178,40 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
     );
   }
 
+  Stack buildMethodItemSelector(_onTap()) {
+    return Stack(
+                  alignment: Alignment.bottomRight,
+                  children: <Widget>[
+                    TextField(
+                        controller:
+                            TextEditingController(text: paymentMethod),
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xff616161)),
+                        autofocus: false,
+                        enabled: false,
+                        decoration: InputDecoration(
+                            alignLabelWithHint: true,
+                            labelText: LABEL1,
+                            labelStyle: TextStyle(
+                                color: Color(0x80616161), fontSize: 12))),
+                    GestureDetector(
+                      onTap: _onTap,
+                      child: Container(
+                        color: Colors.transparent,
+                        width: double.infinity,
+                        height: 55,
+                      ),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 18,
+                        ))
+                  ],
+                );
+  }
+
   void showBottomDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -275,54 +279,4 @@ class _DisbursementInformationState extends State<DisbursementInformation> {
       ),
     );
   }
-}
-
-buildItemSelectView(context, label, _alignment, itemText, _onTap) {
-  return GestureDetector(
-    onTap: _onTap,
-    child: Column(
-      children: <Widget>[
-        Stack(
-          children: <Widget>[
-            Container(
-              height: 38,
-              child: AnimatedAlign(
-                  alignment: _alignment,
-                  duration: Duration(milliseconds: 100),
-                  onEnd: () {},
-                  child: Text(
-                    label,
-                    style: TextStyle(fontSize: 12, color: Color(0x80616161)),
-                  )),
-            ),
-            Container(
-                height: 38,
-                child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 6),
-                            child: Text(itemText,
-                                style: TextStyle(
-                                    fontSize: 14, color: Color(0xff4d4d4d))),
-                          ),
-                        ),
-                        Icon(Icons.arrow_forward_ios, size: 10)
-                      ],
-                    ))),
-          ],
-        ),
-        SizedBox(height: 6),
-        Divider(height: 1, thickness: 1, color: Color(0xffdcdbde)),
-        Text(
-          "",
-          style: TextStyle(fontSize: 12, color: Color(0xffff6956)),
-        ),
-        SizedBox(height: 2)
-      ],
-    ),
-  );
 }
